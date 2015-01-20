@@ -187,15 +187,23 @@ def close_screen(stdscr):
     curses.endwin()
 
 def normalize_lines(text):
+    normal_text = []
+    size = max([len(line) for line in text])
+    for line in text:
+        diff = size - len(line)
+        left = diff / 2
+        right = left if diff % 2 == 0 else left + 1 
+        normal_text.append(' ' * left + line + ' ' * right)
+    return normal_text
     
-
 def centered_print(scr, text):
     scr.clear()
+    normal_text = normalize_lines(text)
     height, width = scr.getmaxyx()
-    x = (width - len(text[0]))/2
-    y = (height - len(text))/2
-    for n in range(len(text)):
-        scr.addstr(y + n, x, text[n])
+    x = (width - len(normal_text[0]))/2
+    y = (height - len(normal_text))/2
+    for n in range(len(normal_text)):
+        scr.addstr(y + n, x, normal_text[n])
     scr.refresh()
 
 def select_from_list(scr, items, title, allow_back=False):
