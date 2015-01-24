@@ -62,7 +62,7 @@ class Level:
             return Events.item_available
         
     def show(self, scr, notification):
-        filename = path_from_root('graphics/styles/{0}'.format(self.location.style.lower()))
+        filename = path_from_root('graphics/styles/{0}.txt'.format(self.location.style.lower()))
         text = open(filename, 'r').read().splitlines()
         text.append('' * 3)
         text.append(notification)
@@ -130,7 +130,7 @@ class Town(Location):
 
 class Game:
     def __init__(self):
-        self.logo_file = path_from_root('graphics/logo')
+        self.logo_file = path_from_root('graphics/logo.txt')
         self.scr = get_screen()
         self.locations = self.generate_locations(10) 
         self.player = Player()
