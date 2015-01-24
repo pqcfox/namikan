@@ -1,5 +1,6 @@
 import curses
 import enum
+import os
 import random
 
 class Attributes(enum.Enum):
@@ -61,7 +62,7 @@ class Level:
             return Events.item_available
         
     def show(self, scr, notification):
-        filename = 'graphics/styles/{0}'.format(self.location.style)
+        filename = path_from_root('graphics/styles/{0}'.format(self.location.style.lower()))
         text = open(filename, 'r').read().splitlines()
         text.append('' * 3)
         text.append(notification)
@@ -129,7 +130,7 @@ class Town(Location):
 
 class Game:
     def __init__(self):
-        self.logo_file = 'graphics/logo'
+        self.logo_file = path_from_root('graphics/logo')
         self.scr = get_screen()
         self.locations = self.generate_locations(10) 
         self.player = Player()
@@ -210,7 +211,7 @@ def normalize_lines(text):
     size = max([len(line) for line in text])
     for line in text:
         diff = size - len(line)
-        left = diff / 2
+        left = diff // 2
         right = left if diff % 2 == 0 else left + 1 
         normal_text.append(' ' * left + line + ' ' * right)
     return normal_text
@@ -219,8 +220,8 @@ def centered_print(scr, text):
     scr.clear()
     normal_text = normalize_lines(text)
     height, width = scr.getmaxyx()
-    x = (width - len(normal_text[0]))/2
-    y = (height - len(normal_text))/2
+    x = (width - len(normal_text[0])) // 2
+    y = (height - len(normal_text)) // 2
     for n in range(len(normal_text)):
         scr.addstr(y + n, x, normal_text[n])
     scr.refresh()
@@ -229,14 +230,14 @@ def select_from_list(scr, items, title, allow_back=False):
     scr.clear()
     selected = 0
     height, width = scr.getmaxyx()
-    min_y = (height - len(items))/2
+    min_y = (height - len(items)) // 2
     title_y = min_y - 2 
-    title_x = (width - len(title))/2
+    title_x = (width - len(title)) // 2
     scr.addstr(title_y, title_x, title, curses.A_UNDERLINE) 
     while True:
         for n in range(len(items)):
             line = '{0} - {1}'.format(n+1, str(items[n]))
-            x = (width - len(line))/2
+            x = (width - len(line)) // 2
             y = min_y + n
             if n == selected:
                 scr.addstr(y, x, line, curses.A_REVERSE)
@@ -252,6 +253,12 @@ def select_from_list(scr, items, title, allow_back=False):
             return items[selected]
         elif allow_back and c == ord('b'):
             return None
+
+def path_from_root(path):
+    root = os.path.realpath(os.path.join(__file__, os.pardir))
+    filename = os.path.join(root, path)
+    return filename
    
-game = Game()
-game.run()
+def run():
+    game = Game()
+    game.run()
