@@ -1,8 +1,6 @@
-import time
 import curses
 import enum
 import random
-
 
 class Attributes(enum.Enum):
     item = 1
@@ -34,11 +32,15 @@ attribute_symbols = {Attributes.item: 'I',
 
 class Player:
     def __init__(self):
-        pass
+        self.items = []
+        self.namichoc = 0 
+        self.namikans = self.generate_namikans()
+
+    def generate_namikans(self):
+        return [] 
 
 class Level:
-    def __init__(self, scr, attributes):
-        self.scr = scr
+    def __init__(self, attributes):
         self.attributes = attributes
         self.event = self.get_event(attributes)
 
@@ -58,23 +60,42 @@ class Level:
         elif Attributes.item in attributes:
             return Events.item_available
         
-    def show(self, notification):
+    def show(self, scr, notification):
         filename = 'graphics/styles/{0}'.format(self.location.style)
         text = open(filename, 'r').read().splitlines()
         text.append('' * 3)
         text.append(notification)
-        centered_print(self.scr, text)
+        centered_print(scr, text)
 
-    def run(self):
+    def run(self, scr, player):
         if self.event is Events.trap_illness:
-            self.show("You have fallen into an illness trap!")
+            self.show(scr, 'You have fallen into an illness trap!')
         else:
-            self.show("You have entered an uneventful area. Boring you.")
-
-
+            self.show(scr, 'You have entered an uneventful area. Boring you.')
+        while True:
+            c = scr.getch()
+            if c == ord('m'):
+                namichoc = player.namichoc
+                self.show(scr, 'You have {0} namichoc.'.format(namichoc))
+            elif c == ord('i'):
+                items = player.items
+                if len(items) == 0:
+                    text = 'You have no items.'
+                else:
+                    item_list = ', '.join(items)
+                    text = 'Your inventory contains: {0}.'.format(item_list)
+                self.show(scr, text)
+            elif c == ord('n'):
+                namikans = player.namikans
+                if len(namikans) == 0:
+                    text = 'You have no Namikans.'
+                else:
+                    namikan_list = ', '.join(namikans)
+                    text = 'Your Namikans are: {0}.'.format(namikan_list)
+                self.show(scr, text)
+   
 class Location:
-    def __init__(self, scr, name, style):
-        self.scr = scr
+    def __init__(self, name, style):
         self.name = name
         self.style = style
         self.levels = self.generate_levels(20)
@@ -91,13 +112,12 @@ class Location:
             for attribute in Attributes:
                 if random.random() < attribute_chances[attribute]:
                     attributes.append(attribute)
-            levels.append(Level(self.scr, attributes))
+            levels.append(Level(attributes))
 
         return levels
 
 class Town(Location):
-    def __init__(self, scr, name, population, fear, anger):
-        self.scr = scr
+    def __init__(self, name, population, fear, anger):
         self.name = name
         self.style = 'Town' 
         self.population = population
@@ -133,9 +153,9 @@ class Game:
                 if location.style == style and location.name == name:
                     continue
             if style == 'Town':
-                locations.append(Town(self.scr, name, 5, 0, 0))
+                locations.append(Town(name, 5, 0, 0))
             else:
-                locations.append(Location(self.scr, name, style))
+                locations.append(Location(name, style))
 
         return locations
 
@@ -164,8 +184,7 @@ class Game:
                     else:
                         screen = Screens.show_level
                 elif screen == Screens.show_level:
-                    current_level.run()
-                    self.scr.getch()
+                    current_level.run(self.scr, self.player)
         except KeyboardInterrupt:
             close_screen(self.scr) 
 
