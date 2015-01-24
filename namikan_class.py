@@ -1,4 +1,4 @@
-import math
+import math, curses
 
 global foodstore
 global Space
@@ -149,7 +149,7 @@ class Namikan():
 
 
 
-Forms = ["Occult", "Nostalgic", "Enigmatic", "Unearthly", "Heraldic", "Divine", "", "]
+Forms = ["Occult", "Nostalgic", "Enigmatic", "Unearthly", "Heraldic", "Divine", "Bionic"]
 
 Abilities = ["Terrifying", "Animated", "Apothecary", "Healer", "Maternal"]
 
@@ -158,8 +158,7 @@ Attacks = ["Soul Catch", "Ditty", "Teleport", "Force Beam", "Circle Cut"]
 Feed(Namikan, Amount):
     if foodstore > Amount:
         foodstore -= Amount
-        Namikan.food += Amont
-    else:
+        Namikan.food += Amount
 
 MuckOut():
     global SpaceDirtiness
@@ -306,34 +305,198 @@ class Battle():
         BNamOne.y = 2
         BNamTwo.x = 6
         BNamTwo.y = 2
-        while(True):
-            GLoc1 = (GNamOne.x,GNamOne.y)
-            GLoc2 = (GNamTwo.x,GNamTwo.y)
-            GLoc3 = (BNamOne.x,BNamOne.y)
-            GLoc4 = (BNamTwo.x,BNamTwo.y)
-            TurnsLeft = GNamOne.speed
-            while(TurnsLeft > 0):
-                if std.scr.getch() == w and GNamOne.x != 0:
-                    GNamOne.x -= 1
-                    TurnsLeft -= 1
-                elif std.scr.getch() == s and GNamOne.x != 8:
-                    GNamOne.x += 1
-                    TurnsLeft -= 1
-                elif std.scr.getch() == a and GNamOne.x != 0:
-                    GNamOne.y -= 1
-                    TurnsLeft -= 1
-                elif std.scr.getch() == d and GNamOne.x != 8:
-                    GNamOne.y += 1
-                    TurnsLeft -= 1
-                elif std.scr.getch() == 1
-                    UseAttack(GNamOne.attackone,GNamOne.x,GNamOne.y,GNamOne)
-                    TurnsLeft -= 1
-                elif std.scr.getch() == 2 
-                    UseAttack(GNamOne.attacktwo,GNamOne.x,GNamOne.y,GNamOne)
-                    TurnsLeft -= 1
-                elif std.scr.getch() == 3 
-                     UseAttack(GNamOne.attackthree,GNamOne.x,GNamOne.y,GNamOne)
-                    TurnsLeft -= 1
+        while(BattleOn == True):
+
+            #UseItem
+
+            if GNamOne.life < 1:
+                GNamOne = None
+            if GNamTwo.life < 1:
+                GNamTwo = None
+            if BNamOne.life < 1:
+                BNamOne = None
+            if BNamTwo.life < 1:
+                BNamTwo = None
+
+            if GNamOne != None:
+                for i in range (9):
+                    for j in range (9):
+                        Arena[i][j] = Ground
+                GLoc1 = (GNamOne.x,GNamOne.y)
+                GLoc2 = (GNamTwo.x,GNamTwo.y)
+                GLoc3 = (BNamOne.x,BNamOne.y)
+                GLoc4 = (BNamTwo.x,BNamTwo.y)
+                Arena[GNamOne.y][GNamOne.x] = GNamOne
+                Arena[GNamTwo.y][GNamTwo.x] = GNamTwo
+                Arena[BNamOne.y][BNamOne.x] = BNamOne
+                Arena[GNamTwo.y][GNamTwo.x] = BNamTwo
+                TurnsLeft = GNamOne.speed
+                while(TurnsLeft > 0):
+                    if std.scr.getch() == w and GNamOne.x != 0:
+                        GNamOne.x -= 1
+                        TurnsLeft -= 1
+                        ShowBattle(Arena,GNamOne,GNamTwo,BNamOne,BNamTwo):
+                    elif std.scr.getch() == s and GNamOne.x != 8:
+                        GNamOne.x += 1
+                        TurnsLeft -= 1
+                        ShowBattle(Arena,GNamOne,GNamTwo,BNamOne,BNamTwo):
+                    elif std.scr.getch() == a and GNamOne.x != 0:
+                        GNamOne.y -= 1
+                        TurnsLeft -= 1
+                        ShowBattle(Arena,GNamOne,GNamTwo,BNamOne,BNamTwo):
+                    elif std.scr.getch() == d and GNamOne.x != 8:
+                        GNamOne.y += 1
+                        TurnsLeft -= 1
+                        ShowBattle(Arena,GNamOne,GNamTwo,BNamOne,BNamTwo):
+                    elif std.scr.getch() == 1:
+                        UseAttack(GNamOne.attackone,GNamOne.x,GNamOne.y,GNamOne)
+                        TurnsLeft = 0
+                        ShowBattle(Arena,GNamOne,GNamTwo,BNamOne,BNamTwo):
+                    elif std.scr.getch() == 2: 
+                        UseAttack(GNamOne.attacktwo,GNamOne.x,GNamOne.y,GNamOne)
+                        TurnsLeft = 0
+                        ShowBattle(Arena,GNamOne,GNamTwo,BNamOne,BNamTwo):
+                    elif std.scr.getch() == 3: 
+                        UseAttack(GNamOne.attackthree,GNamOne.x,GNamOne.y,GNamOne)
+                        TurnsLeft = 0
+                        ShowBattle(Arena,GNamOne,GNamTwo,BNamOne,BNamTwo):
+
+
+            if GNamTwo != None:
+                for i in range (9):
+                    for j in range (9):
+                        Arena[i][j] = Ground
+                GLoc1 = (GNamOne.x,GNamOne.y)
+                GLoc2 = (GNamTwo.x,GNamTwo.y)
+                GLoc3 = (BNamOne.x,BNamOne.y)
+                GLoc4 = (BNamTwo.x,BNamTwo.y)
+                Arena[GNamOne.y][GNamOne.x] = GNamOne
+                Arena[GNamTwo.y][GNamTwo.x] = GNamTwo
+                Arena[BNamOne.y][BNamOne.x] = BNamOne
+                Arena[GNamTwo.y][GNamTwo.x] = BNamTwo
+                TurnsLeft = GNamTwo.speed
+                while(TurnsLeft > 0):
+                    if std.scr.getch() == w and GNamTwo.x != 0:
+                        GNamTwo.x -= 1
+                        TurnsLeft -= 1
+                        ShowBattle(Arena,GNamOne,GNamTwo,BNamOne,BNamTwo):
+                    elif std.scr.getch() == s and GNamTwo.x != 8:
+                        GNamTwo.x += 1
+                        TurnsLeft -= 1
+                        ShowBattle(Arena,GNamOne,GNamTwo,BNamOne,BNamTwo):
+                    elif std.scr.getch() == a and GNamTwo.x != 0:
+                        GNamTwo.y -= 1
+                        TurnsLeft -= 1
+                        ShowBattle(Arena,GNamOne,GNamTwo,BNamOne,BNamTwo):
+                    elif std.scr.getch() == d and GNamTwo.x != 8:
+                        GNamTwo.y += 1
+                        TurnsLeft -= 1
+                        ShowBattle(Arena,GNamOne,GNamTwo,BNamOne,BNamTwo):
+                    elif std.scr.getch() == 1:
+                        UseAttack(GNamTwo.attackone,GNamTwo.x,GNamTwo.y,GNamTwo)
+                        TurnsLeft = 0
+                        ShowBattle(Arena,GNamOne,GNamTwo,BNamOne,BNamTwo):
+                    elif std.scr.getch() == 2: 
+                        UseAttack(GNamTwo.attacktwo,GNamTwo.x,GNamTwo.y,GNamTwo)
+                        TurnsLeft = 0
+                        ShowBattle(Arena,GNamOne,GNamTwo,BNamOne,BNamTwo):
+                    elif std.scr.getch() == 3: 
+                        UseAttack(GNamTwo.attackthree,GNamThree.x,GNamThree.y,GNamTwo)
+                        TurnsLeft = 0
+                        ShowBattle(Arena,GNamOne,GNamTwo,BNamOne,BNamTwo):
+
+            #Use Item
+
+            if BNamOne != None:
+                for i in range (9):
+                    for j in range (9):
+                        Arena[i][j] = Ground
+                GLoc1 = (GNamOne.x,GNamOne.y)
+                GLoc2 = (GNamTwo.x,GNamTwo.y)
+                GLoc3 = (BNamOne.x,BNamOne.y)
+                GLoc4 = (BNamTwo.x,BNamTwo.y)
+                Arena[GNamOne.y][GNamOne.x] = GNamOne
+                Arena[GNamTwo.y][GNamTwo.x] = GNamTwo
+                Arena[BNamOne.y][BNamOne.x] = BNamOne
+                Arena[GNamTwo.y][GNamTwo.x] = BNamTwo
+                TurnsLeft = BNamOne.speed
+                while(TurnsLeft > 0):
+                    Decision = random.randint(0, 6)
+                    if Decision == 0 and BNamOne.x != 0:
+                        BNamOne.x -= 1
+                        TurnsLeft -= 1
+                        ShowBattle(Arena,GNamOne,GNamTwo,BNamOne,BNamTwo):
+                    elif Decision == 1 and BNamOne.x != 8:
+                        BNamOne.x += 1
+                        TurnsLeft -= 1
+                        ShowBattle(Arena,GNamOne,GNamTwo,BNamOne,BNamTwo):
+                    elif Decision == 2 and BNamOne.x != 0:
+                        BNamOne.y -= 1
+                        TurnsLeft -= 1
+                        ShowBattle(Arena,GNamOne,GNamTwo,BNamOne,BNamTwo):
+                    elif Decision == 3 and BNamOne.x != 8:
+                        BNamOne.y += 1
+                        TurnsLeft -= 1
+                        ShowBattle(Arena,GNamOne,GNamTwo,BNamOne,BNamTwo):
+                    elif Decision == 4:
+                        UseAttack(BNamOne.attackone,BNamOne.x,BNamOne.y,BNamOne)
+                        TurnsLeft = 0
+                        ShowBattle(Arena,GNamOne,GNamTwo,BNamOne,BNamTwo):
+                    elif Decision == 5: 
+                        UseAttack(BNamOne.attacktwo,BNamOne.x,BNamOne.y,BNamOne)
+                        TurnsLeft = 0
+                        ShowBattle(Arena,GNamOne,GNamTwo,BNamOne,BNamTwo):
+                    elif Decision == 6:
+                        UseAttack(BNamOne.attackthree,BNamOne.x,BNamOne.y,BNamOne)
+                        TurnsLeft = 0
+                        ShowBattle(Arena,GNamOne,GNamTwo,BNamOne,BNamTwo):
+        
+         
+
+
+            if BNamTwo != None:
+                for i in range (9):
+                    for j in range (9):
+                        Arena[i][j] = Ground
+                GLoc1 = (GNamOne.x,GNamOne.y)
+                GLoc2 = (GNamTwo.x,GNamTwo.y)
+                GLoc3 = (BNamOne.x,BNamOne.y)
+                GLoc4 = (BNamTwo.x,BNamTwo.y)
+                Arena[GNamOne.y][GNamOne.x] = GNamOne
+                Arena[GNamTwo.y][GNamTwo.x] = GNamTwo
+                Arena[BNamOne.y][BNamOne.x] = BNamOne
+                Arena[GNamTwo.y][GNamTwo.x] = BNamTwo
+                TurnsLeft = GNamTwo.speed
+                while(TurnsLeft > 0):
+                    Decision = random.randint(0, 6)
+                    if Decision == 0 and BNamTwo.x != 0:
+                        BNamTwo.x -= 1
+                        TurnsLeft -= 1
+                        ShowBattle(Arena,GNamOne,GNamTwo,BNamOne,BNamTwo):
+                    elif Decision == 1 and BNamTwo.x != 8:
+                        BNamTwo.x += 1
+                        TurnsLeft -= 1
+                        ShowBattle(Arena,GNamOne,GNamTwo,BNamOne,BNamTwo):
+                    elif Decision == 2 and BNamTwo.x != 0:
+                        BNamTwo.y -= 1
+                        TurnsLeft -= 1
+                        ShowBattle(Arena,GNamOne,GNamTwo,BNamOne,BNamTwo):
+                    elif Decision == 3 and BNamTwo.x != 8:
+                        BNamTwo.y += 1
+                        TurnsLeft -= 1
+                        ShowBattle(Arena,GNamOne,GNamTwo,BNamOne,BNamTwo):
+                    elif Decision == 4:
+                        UseAttack(BNamTwo.attackone,BNamTwo.x,BNamTwo.y,BNamTwo)
+                        TurnsLeft = 0
+                        ShowBattle(Arena,GNamOne,GNamTwo,BNamOne,BNamTwo):
+                    elif Decision == 5: 
+                        UseAttack(BNamTwo.attacktwo,BNamTwo.x,BNamTwo.y,BNamTwo)
+                        TurnsLeft = 0
+                        ShowBattle(Arena,GNamOne,GNamTwo,BNamOne,BNamTwo):
+                    elif Decision == 6: 
+                        UseAttack(BNamTwo.attackthree,BNamTwo.x,BNamTwo.y,BNamTwo)
+                        TurnsLeft = 0
+                        ShowBattle(Arena,GNamOne,GNamTwo,BNamOne,BNamTwo):
 
 
 
@@ -396,6 +559,26 @@ class Battle():
         if Attack == "Soul Catch":
             if random.randint(0,3) != 3:
                 GoodSoulCatch = True
+
+    def ShowBattle(Arena,GNamOne,GNamTwo,BNamOne,BNamTwo):
+        CPrint(0,0,"+---------+")
+        CPrint(1,0,"|.........|")
+        CPrint(2,0,"|.........|")
+        CPrint(3,0,"|.........|")
+        CPrint(4,0,"|.........|")
+        CPrint(5,0,"|.........|")
+        CPrint(6,0,"|.........|")
+        CPrint(7,0,"|.........|")
+        CPrint(8,0,"|.........|")
+        CPrint(9,0,"|.........|")
+        CPrint(10,0,"+---------+")
+        CPrint(GnamOne.y+1,GNamOne.x+1,"%")
+        CPrint(GnamTwo.y+1,GNamTwo.x+1,"&")
+        CPrint(BnamOne.y+1,BNamOne.x+1,"#")
+        CPrint(BnamTwo.y+1,BNamTwo.x+1,"$")
+                                                
+                                            
+                                            
                 
                                 
                 
