@@ -92,4 +92,3 @@ class Level:
                     self.show(scr, 'You cannot return until you return to the entrance!') 
             elif c == ord('d') or c == ord('u'):
                 return c
- 

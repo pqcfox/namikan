@@ -69,7 +69,7 @@ def select_from_list(scr, items, title, allow_back=False):
         c = scr.getch()
         if c == ord('u') and selected > 0:
             selected -= 1
-        elif c == ord('d') and selected < 9:
+        elif c == ord('d') and selected < len(items) - 1:
             selected += 1
         elif c == ord('g'): 
             return items[selected]
@@ -91,4 +91,3 @@ def quit_screen(scr):
         exit()
     elif c == ord('r'):
         return
- 
