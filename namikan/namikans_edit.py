@@ -68,7 +68,7 @@ class Namikan():
         if Namikan.breed < 0 and Namikan.growth == Namikan.size:
             Namikan.breed += 1
         if Namikan.food >= Namikan.size and Namikan.clean > 95 and Namikan.sick < 5 and Namikan.breed == 0 and Namikan.growth == Namikan.size and random.randint(0,1) == 1:
-            while(True):
+            while True:
                 Mate = random.select(Namikans)
                 if Mate.growth == Mate.size:
                     Namikan.mate = Mate
@@ -846,7 +846,6 @@ class Battle():
                 DNamikan.life -= int(Power*(ANamikan.attack/DNamikan.defense))
             if random.randint(0,100) <= Probability and Status != None:
                 DNamikan.status = Status
-                            
 
     def ShowBattle(Arena,GNamOne,GNamTwo,BNamOne,BNamTwo):
         CPrint(0,0,"+---------+")

@@ -67,12 +67,14 @@ def select_from_list(scr, items, title, allow_back=False):
                 scr.addstr(y, x, line)
         scr.refresh()
         c = scr.getch()
-        if c == ord('u') and selected > 0:
+        if c == ord('w') and selected > 0:
             selected -= 1
-        elif c == ord('d') and selected < len(items) - 1:
+        elif c == ord('s') and selected < len(items) - 1:
             selected += 1
         elif c == ord('g'): 
             return items[selected]
+        elif c == ord('q'):
+            quit_screen(scr)
         elif allow_back and c == ord('r'):
             return None
 
@@ -90,4 +92,5 @@ def quit_screen(scr):
         print 'Would you like to have your posessions identified?'
         exit()
     elif c == ord('r'):
+        scr.clear()
         return

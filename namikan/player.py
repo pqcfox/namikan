@@ -7,5 +7,3 @@ class Player:
 
     def generate_namikans(self):
         return [] 
-
-

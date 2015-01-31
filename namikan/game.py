@@ -70,14 +70,13 @@ class Game:
                         screen = Screens.show_level
                 elif screen == Screens.show_level:
                     c = current_level.run(self.scr, self.player)
-                    if c == ord('d'):
+                    if c == ord('s'):
                         current_level = helpers.level_offset(current_location, current_level, -1)
-                    elif c == ord('u'):
+                    elif c == ord('w'):
                         current_level = helpers.level_offset(current_location, current_level, 1)
                     elif c == ord('r'):
                         screen = Screens.select_level
                         
         except KeyboardInterrupt:
             helpers.close_screen(self.scr) 
-
-
+            print current_level.number
