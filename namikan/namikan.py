@@ -42,8 +42,9 @@ class Player:
         return [] 
 
 class Level:
-    def __init__(self, attributes):
+    def __init__(self, attributes, number):
         self.attributes = attributes
+        self.number = number
         self.event = self.get_event(attributes)
 
     def __str__(self):
@@ -67,7 +68,8 @@ class Level:
         text = open(filename, 'r').read().splitlines()
         text.append('' * 3)
         text.append(notification)
-        centered_print(scr, text)
+        level_text = 'ENTRANCE' if self.number == 1 else 'LEVEL {0}'.format(self.number) 
+        centered_print(scr, text, upper=level_text)
 
     def run(self, scr, player):
         if self.event is Events.trap_illness:
@@ -106,7 +108,14 @@ class Level:
             elif c == ord('q'):
                 quit_screen(scr)
                 self.show(scr, main_message)
-   
+            elif c == ord('r'):
+                if self.number == 1:
+                    return c 
+                else:
+                    self.show(scr, 'You cannot return until you return to the entrance!') 
+            elif c == ord('d') or c == ord('u'):
+                return c
+                
 class Location:
     def __init__(self, name, style):
         self.name = name
@@ -125,7 +134,7 @@ class Location:
             for attribute in Attributes:
                 if random.random() < attribute_chances[attribute]:
                     attributes.append(attribute)
-            levels.append(Level(attributes))
+            levels.append(Level(attributes, n+1))
 
         return levels
 
@@ -197,7 +206,14 @@ class Game:
                     else:
                         screen = Screens.show_level
                 elif screen == Screens.show_level:
-                    current_level.run(self.scr, self.player)
+                    c = current_level.run(self.scr, self.player)
+                    if c == ord('d'):
+                        current_level = level_offset(current_location, current_level, -1)
+                    elif c == ord('u'):
+                        current_level = level_offset(current_location, current_level, 1)
+                    elif c == ord('r'):
+                        screen = Screens.select_level
+                        
         except KeyboardInterrupt:
             close_screen(self.scr) 
 
@@ -209,6 +225,13 @@ def get_screen():
     curses.curs_set(0)
     stdscr.keypad(1)
     return stdscr
+
+def level_offset(location, level, offset):
+    levels = location.levels
+    index = levels.index(level) + offset
+    if index > len(levels) - 1 or index < 0:
+        return level
+    return levels[index]
 
 def close_screen(stdscr):
     stdscr.keypad(0)
@@ -228,8 +251,10 @@ def normalize_lines(text):
         normal_text.append(' ' * left + line + ' ' * right)
     return normal_text
     
-def centered_print(scr, text):
+def centered_print(scr, text, upper=''):
     scr.clear()
+    if upper != '':
+        scr.addstr(0, 0, upper)
     normal_text = normalize_lines(text)
     height, width = scr.getmaxyx()
     x = (width - len(normal_text[0])) / 2
@@ -257,13 +282,13 @@ def select_from_list(scr, items, title, allow_back=False):
                 scr.addstr(y, x, line)
         scr.refresh()
         c = scr.getch()
-        if c == ord('w') and selected > 0:
+        if c == ord('u') and selected > 0:
             selected -= 1
-        elif c == ord('s') and selected < 9:
+        elif c == ord('d') and selected < 9:
             selected += 1
         elif c == ord('g'): 
             return items[selected]
-        elif allow_back and c == ord('b'):
+        elif allow_back and c == ord('r'):
             return None
 
 def path_from_root(path):
