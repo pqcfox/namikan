@@ -1,0 +1,3 @@
+[console_scripts]
+namikan = namikan.namikan:run
+
