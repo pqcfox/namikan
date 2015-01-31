@@ -1,0 +1,12 @@
+MANIFEST.in
+setup.py
+namikan/__init__.py
+namikan/namikan.py
+namikan/namikan_class.py
+namikan.egg-info/PKG-INFO
+namikan.egg-info/SOURCES.txt
+namikan.egg-info/dependency_links.txt
+namikan.egg-info/entry_points.txt
+namikan.egg-info/top_level.txt
+namikan/graphics/logo.txt
+namikan/graphics/styles/base.txt
