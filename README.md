@@ -1,34 +1,11 @@
 namikan
 =======
 
-An epic curses game written in Python for the enjoyment of all.
+An open-source text-based game written in Python.
 
-Core Features:
+Enter the world of Namikan! In a strange land filled with mystery and wonder, you start long journey as a Namikan trainer. 
+Tame and train Namikans, explore, and vie for power in an extraordinary world.
 
-* Generated Namikans.
-* Namikan needs.
-* Selective breeding.
-* Taming Namikans.
-* Procedural levels.
-* Grid battles.
-* Namikan abilities.
-* Namikan attacks.
-* Namikan types + type matchups.
-* Simple actors (towns, enemy Namikan tamers).
-* Guided Namikan actions.
-* Namikan care.
- 
-Potential features:
+NOTE: Many of the game's core features and content are still under active development. 
 
-* Music.
-* Battle AI.
-* Complex actors.
-* More abilities, types, attacks, etc.
-* Namikan social dynamics.
-* Namikan AI.
-* Namikan training/experience.
-* Different disease types.
-* Advanced Namikan care.
-* Base expansion.
-* Namikan ecosystem.
-* Unguided Namikan actions.
+
